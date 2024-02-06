@@ -1,0 +1,35 @@
+import telebot # подключение к телеботу
+import random
+import xlrd # чтение эксель
+
+# вставляем токен полученный от BotFather
+bot = telebot.TeleBot('6037188167:AAEVhlEqTvJfP6wcX87Vou-2KM_w2cSBhys')
+
+place = ['Chick in', 'Prime', 'Масала Хаус', 'Keto cafe', 'Pho`ngon', 'Эник и Беник', 'Right hops',
+         'Купить что-то в автомате на 23', 'Афимол сити, так Афимол сити']
+
+answer_base = ["Да", "Нет", "Спроси позже", "Сейчас не время", "Это определенно того стоит!", "Подумай еще", "Забудь про это", "Карты говорят, что у тебя всё получится!.. но через жопу"]
+answer_time = ["Пока рано", "Уже совсем скоро", "Может прямо сейчас?", "Возможно, уже на этой неделе", "Чувствую настало время!", "Придётся отложить это дело", "Карты говорят, что настанет полная ж"]
+answer_luck = ["Удача на твоей стороне", "Не стоит полагаться на удачу", "Всё пойдёт через жопу, но удачно"]
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.send_message(message.from_user.id, 'Задавай вопрос')
+
+@bot.message_handle(text='кушать')
+def place_to_eat(message):
+    bot.send_message(message.from_user.id, random.choice(place))
+
+@bot.message_handler(text='скажи')
+def answer_question(message):
+    if message.text.lower() == "когда ":
+        bot.send_message(message.chat.id, random.choice(answer_time))
+    elif message.text.lower() == "удачно ":
+        bot.send_message(message.chat.id, random.choice(answer_luck))
+    elif message.text.lower() == "повезет ":
+        bot.send_message(message.chat.id, random.choice(answer_luck))
+    else:
+        bot.send_message(message.chat.id, random.choice(answer_base))
+
+
+bot.polling(none_stop=True, interval=0) # для беспрерывной работы бота
